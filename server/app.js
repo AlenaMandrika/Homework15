@@ -11,7 +11,6 @@ require('./db')
 app.listen(config.port, () => {
   console.log(`Server running at port: ${config.port}`)
 })
-
 app.use(bodyParser.json())
 
 app.use('/api/v1', todo)

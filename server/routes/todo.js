@@ -22,12 +22,8 @@ router.get('/todo', (req, res, next) => {
     .catch(next)
 })
 
-
 router.post('/todo', (req, res) => {
-  if (!req.body.todo) {
-    return res.status(400).json(err)
-  }
-  new Todo({"req.body.todo": req.body.todo})
+  new Todo(req.body.todo)
     .save()
     .then(todo => {
       res.json({todo})
@@ -42,7 +38,7 @@ router.put('/todo/:id', function (req, res) {
     {text: req.body.todo.text,
      url: req.body.todo.url,
      date: req.body.todo.date,
-     complete: req.body.todo.complete
+     complete: req.body.todo.complete,
     },
     {new: true},
     function (err, todo) {

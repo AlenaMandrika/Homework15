@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const app = express()
 
 const config = require('./config')
-const todo = require('./models/todo')
+const todo = require('./routes/todo')
 
 require('./db')
 

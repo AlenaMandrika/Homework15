@@ -24,10 +24,10 @@ router.get('/todo', (req, res, next) => {
 router.post('/todo', (req, res, next) => {
  let newTodo = new Todo(req.body.todo)
 
-  if(req.body.todo.text !== undefined
-    && req.body.todo.complete !== undefined
-    && req.body.todo.date !== undefined
-    || req.body.todo.url!== undefined ) {
+  if(req.body.todo.text === ""
+    && req.body.todo.complete === ""
+    && req.body.todo.date === ""
+    || req.body.todo.url === "" ) {
     console.log('todo err , field is empty : ',req.body.todo);
 
     res.json({success: false, message: 'Please enter text and url.'});

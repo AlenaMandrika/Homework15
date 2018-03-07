@@ -21,27 +21,37 @@ router.get('/todo', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/todo', (req, res, next) => {
+router.post('/todo', (req, res) => {
  let newTodo = new Todo(req.body.todo)
 
-  if(req.body.todo.text === ""
-    && req.body.todo.complete === ""
-    && req.body.todo.date === ""
-    || req.body.todo.url === "" ) {
+  if (req.body.todo.text === ''
+    || req.body.todo.complete === ''
+    || req.body.todo.date === ''
+    || req.body.todo.url === '') {
     console.log('todo err , field is empty : ',req.body.todo);
 
-    res.json({success: false, message: 'Please enter text and url.'});
+    res.json({success: false, message: 'Please fill in the fields'});
+
   } else {
     newTodo.save()
       .then(todo => {
         res.json({todo})
+      }, (err) => {
+        res.status(400).json(err)
       })
-      .catch(next)
   }
-
 })
 
+
 router.put('/todo/:id', function (req, res) {
+  let todo = req.body.todo
+  for (let key in todo) {
+    if(todo.hasOwnProperty(key)) {
+      console.log((key + ':' + todo[key]))
+    } else {
+      console.log(key)
+    }
+  }
   Todo.findOneAndUpdate({'_id': req.params.id},
     {text: req.body.todo.text,
       url: req.body.todo.url,
@@ -56,6 +66,7 @@ router.put('/todo/:id', function (req, res) {
       res.status(200).json(todo)
     })
 })
+
 
 router.delete('/todo/:id', function (req, res) {
   let id = req.params.id

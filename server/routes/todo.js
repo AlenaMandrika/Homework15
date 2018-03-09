@@ -42,7 +42,10 @@ router.post('/todo', (req, res) => {
 
 router.put('/todo/:id', function (req, res) {
   let todo = req.body.todo
-  if (('text' in todo) && ('url' in todo) && ('date' in todo)) {
+  if (('text' in todo)
+    && ('url' in todo)
+    && ('date' in todo)
+    && ('complete' in todo) ) {
     Todo.findOneAndUpdate({'_id': req.params.id},
       {text: req.body.todo.text,
         url: req.body.todo.url,

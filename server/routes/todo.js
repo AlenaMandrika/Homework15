@@ -22,20 +22,24 @@ router.get('/todo', (req, res, next) => {
 })
 
 router.post('/todo', (req, res) => {
- let newTodo = new Todo(req.body.todo)
-  if (req.body.todo.text !== ''
-    && req.body.todo.complete !== ''
-    && req.body.todo.date !== ''
-    && req.body.todo.url !== '') {
-    newTodo.save()
-      .then(todo => {
-        res.json({todo})
-      }, (err) => {
-        res.status(400).json(err)
-      })
+  if (req.body.todo) {
+    let newTodo = new Todo(req.body.todo)
+    if (req.body.todo.text !== ''
+      && req.body.todo.complete !== ''
+      && req.body.todo.date !== ''
+      && req.body.todo.url !== '') {
+      newTodo.save()
+        .then(todo => {
+          res.json({todo})
+        }, (err) => {
+          res.status(400).json(err)
+        })
+    } else {
+      console.log('todo err , field is empty : ',req.body.todo);
+      res.status(400).json({success: false, message: 'Please fill in the fields'});
+    }
   } else {
-    console.log('todo err , field is empty : ',req.body.todo);
-    res.status(400).json({success: false, message: 'Please fill in the fields'});
+    res.status(400).json({success: false, message: 'body absent'});
   }
 })
 
@@ -43,14 +47,14 @@ router.post('/todo', (req, res) => {
 router.put('/todo/:id', function (req, res) {
   let todo = req.body.todo
   if (('text' in todo)
-    && ('url' in todo)
-    && ('date' in todo)
-    && ('complete' in todo) ) {
+    || ('url' in todo)
+    || ('date' in todo)
+    || ('complete' in todo) ) {
     Todo.findOneAndUpdate({'_id': req.params.id},
-      {text: req.body.todo.text,
-        url: req.body.todo.url,
-        date: req.body.todo.date,
-        complete: req.body.todo.complete
+      {text: req.body.todo.text || '',
+        url: req.body.todo.url || '',
+        date: req.body.todo.date || '',
+        complete: req.body.todo.complete || false
       },
       {new: true},
       function (err, todo) {
